@@ -12,7 +12,7 @@
     "@base-ui/react": "^1.9.0",
     "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^6.0.2",
-    "@prisma/client": "^7.10.1",
+    "@prisma/client": "^6.4.1",
     "@radix-ui/react-slot": "^1.5.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.118.0",
@@ -37,8 +37,12 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
-    "prisma": "^8.0.0-rc.28",
+    "prisma": "^6.4.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
