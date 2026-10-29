@@ -18,6 +18,7 @@ import { DescriptionForm } from "@/components/teacher/courses/DescriptionForm"
 import { CategoryForm } from "@/components/teacher/courses/CategoryForm"
 import { LevelForm } from "@/components/teacher/courses/LevelForm"
 import { ImageUpload } from "@/components/teacher/courses/ImageUpload"
+import { ChapterList } from "@/components/teacher/courses/ChapterList"
 import { CourseActions } from "@/components/teacher/courses/CourseActions"
 
 interface CourseIdPageProps {
@@ -189,26 +190,10 @@ export default async function CourseIdPage({ params }: CourseIdPageProps) {
               <h2 className="text-lg font-semibold">Course chapters</h2>
             </div>
 
-            {/* Chapters placeholder card */}
-            <div className="rounded-xl border bg-card p-4 shadow-xs">
-              <div className="flex items-center justify-between font-medium text-foreground mb-2">
-                <span className="text-sm font-semibold">Curriculum & Chapters</span>
-                <Badge variant="outline" className="text-xs text-muted-foreground">
-                  Step 3 (Next)
-                </Badge>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border/80 bg-muted/20 p-8 text-center">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted text-muted-foreground mb-2">
-                  <ListChecks className="h-5 w-5" />
-                </div>
-                <p className="text-sm font-medium text-foreground">
-                  No chapters yet
-                </p>
-                <p className="text-xs text-muted-foreground max-w-xs mt-1">
-                  Chapter creation, video lesson upload, and curriculum reordering are coming in the next step.
-                </p>
-              </div>
-            </div>
+            <ChapterList
+              items={course.chapters}
+              courseId={course.id}
+            />
 
             {/* Course status quick overview */}
             <div className="rounded-xl border bg-muted/30 p-4">
