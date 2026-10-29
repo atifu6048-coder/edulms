@@ -62,6 +62,7 @@ model Course {
   imageUrl    String?  @db.Text // Public URL from Supabase Storage bucket
   price       Float?
   isPublished Boolean  @default(false)
+  level       String?
 
   categoryId  String?
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
