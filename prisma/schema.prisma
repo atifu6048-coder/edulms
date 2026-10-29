@@ -1,0 +1,156 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// -----------------------------------------------------------------------------
+// Enums
+// -----------------------------------------------------------------------------
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+// -----------------------------------------------------------------------------
+// Models
+// -----------------------------------------------------------------------------
+
+/// Represents application users synced from Supabase Auth
+model User {
+  id        String   @id // Matches Supabase Auth UUID (auth.users.id)
+  email     String   @unique
+  fullName  String?
+  avatarUrl String?
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  courses      Course[]       @relation("InstructorCourses")
+  enrollments  Enrollment[]
+  userProgress UserProgress[]
+
+  @@map("users")
+}
+
+/// Course categories (e.g., Development, Design, Business)
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  courses Course[]
+
+  @@map("categories")
+}
+
+/// The main course entity created by an instructor
+model Course {
+  id          String   @id @default(cuid())
+  userId      String   // Instructor's User.id
+  title       String   @db.Text
+  description String?  @db.Text
+  imageUrl    String?  @db.Text // Public URL from Supabase Storage bucket
+  price       Float?
+  isPublished Boolean  @default(false)
+
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  user        User      @relation("InstructorCourses", fields: [userId], references: [id], onDelete: Cascade)
+
+  chapters    Chapter[]
+  attachments Attachment[]
+  enrollments Enrollment[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@index([userId])
+  @@map("courses")
+}
+
+/// Modules or lessons within a course
+model Chapter {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+  videoUrl    String?  @db.Text // Supabase Storage public or signed video URL
+  position    Int      // Sort order in the course syllabus
+  isPublished Boolean  @default(false)
+  isFree      Boolean  @default(false) // Whether accessible without enrollment preview
+
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  userProgress UserProgress[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([courseId])
+  @@map("chapters")
+}
+
+/// Tracks which chapters a student has completed
+model UserProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  chapterId   String
+  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  isCompleted Boolean  @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, chapterId])
+  @@index([chapterId])
+  @@map("user_progress")
+}
+
+/// Downloadable resources attached to a course (stored in Supabase Storage)
+model Attachment {
+  id        String   @id @default(cuid())
+  name      String
+  url       String   @db.Text // URL in Supabase Storage 'course-attachments' bucket
+
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
+  @@map("attachments")
+}
+
+/// Represents a student's active enrollment in a course
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+  @@map("enrollments")
+}
+
