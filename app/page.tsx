@@ -80,7 +80,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-zinc-100 dark:border-zinc-800 py-6 text-center text-xs text-zinc-500">
-        &copy; {new Date().getFullYear()} EduFlow. All rights reserved.
+        &copy; 2026 EduFlow. All rights reserved.
       </footer>
     </div>
   );
