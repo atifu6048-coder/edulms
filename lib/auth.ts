@@ -1,4 +1,3 @@
-import { connection } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { db } from "@/lib/db"
 
@@ -8,10 +7,6 @@ import { db } from "@/lib/db"
  * (e.g. immediate redirect after initial sign-up), it creates the record on the fly.
  */
 export async function getCurrentUser() {
-  // Opt into dynamic request handling before Supabase Auth evaluates
-  // token expiration timestamps via Date.now().
-  await connection()
-
   const supabase = await createClient()
 
   const {
