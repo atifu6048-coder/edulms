@@ -17,6 +17,7 @@ import { TitleForm } from "@/components/teacher/courses/TitleForm"
 import { DescriptionForm } from "@/components/teacher/courses/DescriptionForm"
 import { CategoryForm } from "@/components/teacher/courses/CategoryForm"
 import { LevelForm } from "@/components/teacher/courses/LevelForm"
+import { ImageUpload } from "@/components/teacher/courses/ImageUpload"
 import { CourseActions } from "@/components/teacher/courses/CourseActions"
 
 interface CourseIdPageProps {
@@ -159,23 +160,10 @@ export default async function CourseIdPage({ params }: CourseIdPageProps) {
               courseId={course.id}
             />
 
-            {/* Course image placeholder card */}
-            <div className="rounded-xl border bg-card p-4 shadow-xs">
-              <div className="flex items-center justify-between font-medium text-foreground mb-2">
-                <span className="text-sm font-semibold">Course image</span>
-                <Badge variant="outline" className="text-xs text-muted-foreground">
-                  Step 2 (Next)
-                </Badge>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border/80 bg-muted/20 p-6 text-center">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted text-muted-foreground mb-2">
-                  <ImageIcon className="h-5 w-5" />
-                </div>
-                <p className="text-xs font-medium text-muted-foreground">
-                  16:9 aspect ratio recommended. Image upload is coming in the next step.
-                </p>
-              </div>
-            </div>
+            <ImageUpload
+              initialData={{ imageUrl: course.imageUrl }}
+              courseId={course.id}
+            />
 
             <CategoryForm
               initialData={{ categoryId: course.categoryId }}
