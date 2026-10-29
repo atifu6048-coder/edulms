@@ -16,6 +16,7 @@ import { ChapterTitleForm } from "@/components/teacher/courses/ChapterTitleForm"
 import { ChapterDescriptionForm } from "@/components/teacher/courses/ChapterDescriptionForm"
 import { ChapterAccessForm } from "@/components/teacher/courses/ChapterAccessForm"
 import { ChapterActions } from "@/components/teacher/courses/ChapterActions"
+import { VideoUpload } from "@/components/teacher/courses/VideoUpload"
 
 interface ChapterIdPageProps {
   params: Promise<{
@@ -195,29 +196,15 @@ export default async function ChapterIdPage({ params }: ChapterIdPageProps) {
               <h2 className="text-lg font-semibold">Add a video</h2>
             </div>
 
-            {/* Video Placeholder Card */}
-            <div className="rounded-xl border bg-card p-4 shadow-xs">
-              <div className="flex items-center justify-between font-medium text-foreground mb-2">
-                <span className="text-sm font-semibold">Chapter video</span>
-                <Badge variant="outline" className="text-xs text-muted-foreground">
-                  Step 4 (Next)
-                </Badge>
-              </div>
-              <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border/80 bg-muted/20 p-8 text-center">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground mb-3">
-                  <Video className="h-6 w-6" />
-                </div>
-                <p className="text-sm font-medium text-foreground">
-                  No video lesson uploaded yet
-                </p>
-                <p className="text-xs text-muted-foreground max-w-xs mt-1">
-                  Video upload via Supabase Storage and video playback controls are coming in the next step.
-                </p>
-              </div>
-            </div>
+            <VideoUpload
+              initialData={{ videoUrl: chapter.videoUrl }}
+              courseId={courseId}
+              chapterId={chapter.id}
+            />
           </div>
         </div>
       </div>
     </div>
   )
 }
+
