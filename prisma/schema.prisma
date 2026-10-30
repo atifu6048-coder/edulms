@@ -36,6 +36,7 @@ model User {
   courses      Course[]       @relation("InstructorCourses")
   enrollments  Enrollment[]
   userProgress UserProgress[]
+  certificates Certificate[]
 
   @@map("users")
 }
@@ -73,6 +74,7 @@ model Course {
   chapters    Chapter[]
   attachments Attachment[]
   enrollments Enrollment[]
+  certificates Certificate[]
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -155,4 +157,25 @@ model Enrollment {
   @@index([courseId])
   @@map("enrollments")
 }
+
+/// Represents a verified certificate of course completion
+model Certificate {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  courseId   String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  uniqueCode String   @unique
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+  @@index([uniqueCode])
+  @@map("certificates")
+}
+
 

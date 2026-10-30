@@ -108,6 +108,9 @@ export default async function StudentLearnPage({ params }: LearnPageProps) {
   const completedCount = chaptersForSidebar.filter((ch) => ch.isCompleted).length
   const totalCount = chaptersForSidebar.length
   const currentIsCompleted = completedMap.get(currentChapter.id) ?? false
+  const isFinalIncomplete =
+    (completedCount === totalCount - 1 && !currentIsCompleted) ||
+    completedCount === totalCount
 
   const currentIndex = course.chapters.findIndex((ch) => ch.id === chapterId)
   const prevChapter = currentIndex > 0 ? course.chapters[currentIndex - 1] : null
@@ -140,8 +143,10 @@ export default async function StudentLearnPage({ params }: LearnPageProps) {
             title={currentChapter.title}
             chapterId={currentChapter.id}
             courseId={course.id}
+            courseTitle={course.title}
             nextChapterId={nextChapter?.id}
             isCompleted={currentIsCompleted}
+            isFinalIncomplete={isFinalIncomplete}
           />
 
           {/* Under video: Prev/Next chapter navigation & MarkCompleteButton */}
@@ -163,8 +168,10 @@ export default async function StudentLearnPage({ params }: LearnPageProps) {
               <MarkCompleteButton
                 chapterId={currentChapter.id}
                 courseId={course.id}
+                courseTitle={course.title}
                 isCompleted={currentIsCompleted}
                 nextChapterId={nextChapter?.id}
+                isFinalIncomplete={isFinalIncomplete}
               />
 
               {nextChapter ? (
@@ -176,8 +183,8 @@ export default async function StudentLearnPage({ params }: LearnPageProps) {
                 </Button>
               ) : (
                 <Button asChild variant="outline" size="sm">
-                  <Link href={`/courses/${course.id}`}>
-                    Course Complete
+                  <Link href="/student/certificates">
+                    View Certificate
                   </Link>
                 </Button>
               )}

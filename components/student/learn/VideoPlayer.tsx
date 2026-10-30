@@ -5,15 +5,19 @@ import { useRouter } from "next/navigation"
 import { PlayCircle } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+import { CourseCompleteModal } from "@/components/student/learn/CourseCompleteModal"
 
 interface VideoPlayerProps {
   videoUrl?: string | null
   title?: string
   chapterId?: string
   courseId?: string
+  courseTitle?: string
   nextChapterId?: string
   isCompleted?: boolean
+  isFinalIncomplete?: boolean
   onEnded?: () => void
+  onCourseComplete?: () => void
   className?: string
 }
 
@@ -22,12 +26,16 @@ export function VideoPlayer({
   title,
   chapterId,
   courseId,
+  courseTitle = "Course",
   nextChapterId,
   isCompleted = false,
+  isFinalIncomplete = false,
   onEnded,
+  onCourseComplete,
   className,
 }: VideoPlayerProps) {
   const router = useRouter()
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
 
   const handleEnded = async () => {
     if (onEnded) {
@@ -47,7 +55,13 @@ export function VideoPlayer({
 
         if (res.ok) {
           toast.success("Lesson completed!")
-          if (nextChapterId && courseId) {
+          if (isFinalIncomplete || !nextChapterId) {
+            if (onCourseComplete) {
+              onCourseComplete()
+            } else {
+              setIsModalOpen(true)
+            }
+          } else if (nextChapterId && courseId) {
             router.push(`/student/learn/${courseId}/${nextChapterId}`)
           }
           router.refresh()
@@ -78,21 +92,32 @@ export function VideoPlayer({
   }
 
   return (
-    <div
-      className={cn(
-        "relative aspect-video w-full overflow-hidden rounded-2xl bg-black border border-border shadow-xl flex items-center justify-center",
-        className
+    <>
+      <div
+        className={cn(
+          "relative aspect-video w-full overflow-hidden rounded-2xl bg-black border border-border shadow-xl flex items-center justify-center",
+          className
+        )}
+      >
+        <video
+          key={videoUrl}
+          src={videoUrl}
+          controls
+          playsInline
+          onEnded={handleEnded}
+          aria-label={title || "Lesson Video"}
+          className="h-full w-full object-contain"
+        />
+      </div>
+
+      {courseId && (
+        <CourseCompleteModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          courseId={courseId}
+          courseTitle={courseTitle}
+        />
       )}
-    >
-      <video
-        key={videoUrl}
-        src={videoUrl}
-        controls
-        playsInline
-        onEnded={handleEnded}
-        aria-label={title || "Lesson Video"}
-        className="h-full w-full object-contain"
-      />
-    </div>
+    </>
   )
 }
