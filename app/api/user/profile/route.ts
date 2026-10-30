@@ -8,7 +8,13 @@ const profileSchema = z.object({
     .string()
     .trim()
     .min(1, "Display name cannot be empty")
-    .max(100, "Display name must be under 100 characters"),
+    .max(100, "Display name must be under 100 characters")
+    .optional(),
+  bio: z
+    .string()
+    .max(1000, "Bio cannot exceed 1000 characters")
+    .nullable()
+    .optional(),
 })
 
 export async function PATCH(request: NextRequest) {
@@ -36,18 +42,21 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const { fullName } = result.data
+    const { fullName, bio } = result.data
+
+    const updateData: { fullName?: string; bio?: string | null } = {}
+    if (fullName !== undefined) updateData.fullName = fullName
+    if (bio !== undefined) updateData.bio = bio
 
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      data: {
-        fullName,
-      },
+      data: updateData,
       select: {
         id: true,
         email: true,
         fullName: true,
         role: true,
+        bio: true,
         avatarUrl: true,
         updatedAt: true,
       },

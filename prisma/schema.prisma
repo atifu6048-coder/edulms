@@ -29,6 +29,7 @@ model User {
   fullName  String?
   avatarUrl String?
   role      Role     @default(STUDENT)
+  bio       String?  @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
