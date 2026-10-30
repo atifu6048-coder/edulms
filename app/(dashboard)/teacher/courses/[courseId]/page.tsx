@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   LayoutDashboard,
   ListChecks,
-  ImageIcon,
   Sparkles,
 } from "lucide-react"
 
@@ -65,46 +64,52 @@ export default async function CourseIdPage({ params }: CourseIdPageProps) {
     },
   })
 
+  const hasPublishedChapter = course.chapters.some((chapter) => chapter.isPublished)
+
+  const missingFields: string[] = []
+  if (!course.title) missingFields.push("Course title")
+  if (!course.description) missingFields.push("Course description")
+  if (!course.imageUrl) missingFields.push("Course thumbnail image")
+  if (!course.categoryId) missingFields.push("Course category")
+  if (!hasPublishedChapter) missingFields.push("At least one published chapter")
+
   const requiredFields = [
     Boolean(course.title),
     Boolean(course.description),
     Boolean(course.imageUrl),
     Boolean(course.categoryId),
     Boolean(course.level),
-    course.chapters.some((chapter) => chapter.isPublished),
+    hasPublishedChapter,
   ]
 
   const totalFields = requiredFields.length // 6
   const completedFields = requiredFields.filter(Boolean).length
   const completionText = `(${completedFields}/${totalFields})`
-  const isComplete = requiredFields.every(Boolean)
+  const isPublishable = missingFields.length === 0
 
   return (
     <div className="flex flex-col">
-      {/* 3. Completion banner at top */}
-      <div
-        className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b px-6 py-3.5 text-sm ${
-          isComplete
-            ? "bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border-emerald-500/20"
-            : "bg-amber-500/10 text-amber-800 dark:text-amber-200 border-amber-500/20"
-        }`}
-      >
-        <div className="flex items-center gap-x-2">
-          {isComplete ? (
-            <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
-          ) : (
+      {/* Subtle publication banner at top */}
+      {!course.isPublished && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b px-6 py-3.5 text-sm bg-amber-500/10 text-amber-800 dark:text-amber-200 border-amber-500/20">
+          <div className="flex items-center gap-x-2">
             <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
-          )}
-          <span>
-            {course.isPublished
-              ? "This course is published and live in the public catalog."
-              : "This course is currently unpublished. It will not be visible to students until published."}
-          </span>
+            <span>This course is not visible to students.</span>
+          </div>
+          <div className="flex items-center gap-x-2 font-semibold">
+            <span>Complete all fields to publish {completionText}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-x-2 font-semibold">
-          <span>Complete all fields to publish {completionText}</span>
+      )}
+
+      {course.isPublished && (
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b px-6 py-3.5 text-sm bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border-emerald-500/20">
+          <div className="flex items-center gap-x-2">
+            <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+            <span>This course is published and live in the public catalog.</span>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="p-6 md:p-8 max-w-6xl mx-auto w-full space-y-6">
         {/* Navigation & Header */}
@@ -126,8 +131,13 @@ export default async function CourseIdPage({ params }: CourseIdPageProps) {
                 Draft
               </Badge>
             )}
-            {/* 4. Delete course button */}
-            <CourseActions courseId={course.id} />
+            {/* Publish / Unpublish and Delete course actions */}
+            <CourseActions
+              courseId={course.id}
+              isPublished={course.isPublished}
+              disabled={!isPublishable}
+              missingFields={missingFields}
+            />
           </div>
         </div>
 
@@ -140,7 +150,7 @@ export default async function CourseIdPage({ params }: CourseIdPageProps) {
           </p>
         </div>
 
-        {/* 2. Inline-editable sections & placeholders */}
+        {/* Inline-editable sections */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
           {/* Left Column: Course Details */}
           <div className="space-y-6">
@@ -199,7 +209,7 @@ export default async function CourseIdPage({ params }: CourseIdPageProps) {
             <div className="rounded-xl border bg-muted/30 p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="h-4 w-4 text-primary" />
-                <span className="text-sm font-semibold">Checklist Checklist</span>
+                <span className="text-sm font-semibold">Checklist</span>
               </div>
               <ul className="text-xs space-y-2 text-muted-foreground">
                 <li className="flex items-center gap-2">
@@ -233,8 +243,8 @@ export default async function CourseIdPage({ params }: CourseIdPageProps) {
                   <span>Difficulty level selected</span>
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className={course.chapters.some((c) => c.isPublished) ? "text-emerald-600 font-bold" : "text-muted-foreground"}>
-                    {course.chapters.some((c) => c.isPublished) ? "✓" : "○"}
+                  <span className={hasPublishedChapter ? "text-emerald-600 font-bold" : "text-muted-foreground"}>
+                    {hasPublishedChapter ? "✓" : "○"}
                   </span>
                   <span>At least one published chapter</span>
                 </li>

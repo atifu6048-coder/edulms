@@ -67,6 +67,11 @@ export default async function ChapterIdPage({ params }: ChapterIdPageProps) {
     return notFound()
   }
 
+  const missingFields: string[] = []
+  if (!chapter.title) missingFields.push("Chapter title")
+  if (!chapter.description) missingFields.push("Chapter description")
+  if (!chapter.videoUrl) missingFields.push("Chapter video")
+
   const requiredFields = [
     Boolean(chapter.title),
     Boolean(chapter.description),
@@ -76,7 +81,7 @@ export default async function ChapterIdPage({ params }: ChapterIdPageProps) {
   const totalFields = requiredFields.length
   const completedFields = requiredFields.filter(Boolean).length
   const completionText = `(${completedFields}/${totalFields})`
-  const isComplete = requiredFields.every(Boolean)
+  const isPublishable = missingFields.length === 0
 
   return (
     <div className="flex flex-col">
@@ -131,6 +136,8 @@ export default async function ChapterIdPage({ params }: ChapterIdPageProps) {
               courseId={courseId}
               chapterId={chapterId}
               isPublished={chapter.isPublished}
+              disabled={!isPublishable}
+              missingFields={missingFields}
             />
           </div>
         </div>
@@ -207,4 +214,3 @@ export default async function ChapterIdPage({ params }: ChapterIdPageProps) {
     </div>
   )
 }
-

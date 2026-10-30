@@ -127,6 +127,23 @@ export async function PUT(
       data: updatePayload,
     })
 
+    // If a chapter was set to unpublished, verify if any published chapters remain
+    if (updatePayload.isPublished === false) {
+      const remainingPublished = await prisma.chapter.findMany({
+        where: {
+          courseId,
+          isPublished: true,
+        },
+      })
+
+      if (remainingPublished.length === 0) {
+        await prisma.course.update({
+          where: { id: courseId },
+          data: { isPublished: false },
+        })
+      }
+    }
+
     return NextResponse.json(updatedChapter, { status: 200 })
   } catch (error) {
     console.error("[CHAPTER_UPDATE_ERROR]:", error)
