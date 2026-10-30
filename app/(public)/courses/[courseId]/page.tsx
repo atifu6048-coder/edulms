@@ -19,6 +19,7 @@ import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/auth"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { EnrollButton } from "@/components/courses/EnrollButton"
 
 interface CourseDetailPageProps {
   params: Promise<{ courseId: string }>
@@ -89,6 +90,8 @@ export default async function PublicCourseDetailPage({
 
   // Check enrollment status for signed-in user
   let isEnrolled = false
+  let targetChapterId = course.chapters[0]?.id
+
   if (user) {
     const enrollment = await db.enrollment.findUnique({
       where: {
@@ -99,6 +102,23 @@ export default async function PublicCourseDetailPage({
       },
     })
     isEnrolled = !!enrollment
+
+    if (isEnrolled && course.chapters.length > 0) {
+      const chapterIds = course.chapters.map((ch) => ch.id)
+      const userProgress = await db.userProgress.findMany({
+        where: {
+          userId: user.id,
+          chapterId: { in: chapterIds },
+          isCompleted: true,
+        },
+        select: {
+          chapterId: true,
+        },
+      })
+      const completedSet = new Set(userProgress.map((p) => p.chapterId))
+      const firstIncomplete = course.chapters.find((ch) => !completedSet.has(ch.id))
+      targetChapterId = firstIncomplete ? firstIncomplete.id : course.chapters[0].id
+    }
   }
 
   const teacherName = course.user?.fullName || "EduFlow Instructor"
@@ -193,28 +213,13 @@ export default async function PublicCourseDetailPage({
 
             {/* Big Action Button (Mobile & Desktop) */}
             <div className="pt-2">
-              {!user ? (
-                <Button asChild size="lg" className="w-full sm:w-auto h-12 px-8 text-base font-bold shadow-md">
-                  <Link href="/sign-in">
-                    Enroll for Free
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              ) : isEnrolled ? (
-                <Button asChild size="lg" className="w-full sm:w-auto h-12 px-8 text-base font-bold bg-emerald-600 hover:bg-emerald-700 shadow-md">
-                  <Link href={`/student/my-courses`}>
-                    Continue Learning
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              ) : (
-                <Button asChild size="lg" className="w-full sm:w-auto h-12 px-8 text-base font-bold shadow-md">
-                  <Link href="/sign-in">
-                    Enroll for Free
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              )}
+              <EnrollButton
+                courseId={course.id}
+                firstChapterId={course.chapters[0]?.id}
+                targetChapterId={targetChapterId}
+                isEnrolled={isEnrolled}
+                isSignedIn={Boolean(user)}
+              />
             </div>
           </div>
 
@@ -327,3 +332,4 @@ export default async function PublicCourseDetailPage({
     </div>
   )
 }
+
