@@ -30,8 +30,8 @@ EduFlow is an open, modern Learning Management System (LMS) built for instructor
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/eduflow.git
-   cd eduflow
+   git clone https://github.com/atifu6048-coder/edulms.git
+   cd edulms
    ```
 
 2. **Install dependencies**:
