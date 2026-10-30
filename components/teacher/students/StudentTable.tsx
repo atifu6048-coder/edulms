@@ -10,13 +10,11 @@ import {
   ArrowDown,
   Users,
   Calendar,
-  BookOpen,
   CheckCircle2,
 } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import {
   Table,
   TableBody,
@@ -54,7 +52,7 @@ export function StudentTable({ initialData }: StudentTableProps) {
   }
 
   const filteredAndSorted = React.useMemo(() => {
-    let result = initialData.filter((item) => {
+    const result = initialData.filter((item) => {
       const query = searchTerm.toLowerCase().trim()
       if (!query) return true
       return (

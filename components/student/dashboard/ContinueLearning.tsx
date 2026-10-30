@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { PlayCircle, Layers, ArrowRight, Sparkles } from "lucide-react"
+import { PlayCircle, Layers, Sparkles } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -36,8 +36,6 @@ export function ContinueLearning({
   totalCount,
   className,
 }: ContinueLearningProps) {
-  const percentage =
-    totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0
 
   return (
     <div

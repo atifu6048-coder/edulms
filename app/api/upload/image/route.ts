@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     const adminClient = createAdminClient()
 
     // 6. Upload using Supabase Service-Role Admin Client (bypasses RLS)
-    let { data, error: uploadError } = await adminClient.storage
+    let { error: uploadError } = await adminClient.storage
       .from("course-images")
       .upload(filePath, buffer, {
         contentType: file.type,
@@ -93,7 +93,6 @@ export async function POST(request: NextRequest) {
           upsert: true,
         })
       uploadError = retry.error
-      data = retry.data
     }
 
     if (uploadError) {

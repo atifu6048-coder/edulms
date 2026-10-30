@@ -92,9 +92,9 @@ export async function POST(
       })
 
       return NextResponse.json(enrollment, { status: 201 })
-    } catch (createError: any) {
+    } catch (createError: unknown) {
       // Prisma unique constraint violation code is P2002
-      if (createError?.code === "P2002") {
+      if (createError && typeof createError === "object" && "code" in createError && (createError as { code: string }).code === "P2002") {
         return NextResponse.json(
           { error: "Already enrolled" },
           { status: 400 }

@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { BookOpen, Layers, CheckCircle2, PlayCircle, ArrowRight } from "lucide-react"
+import { BookOpen, Layers, CheckCircle2, PlayCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -51,10 +51,6 @@ export function CourseGrid({ courses, className }: CourseGridProps) {
       )}
     >
       {courses.map((course) => {
-        const percentage =
-          course.totalCount > 0
-            ? Math.round((course.completedCount / course.totalCount) * 100)
-            : 0
 
         return (
           <Card

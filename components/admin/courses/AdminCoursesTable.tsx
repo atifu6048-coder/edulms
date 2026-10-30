@@ -9,10 +9,7 @@ import {
   Star,
   EyeOff,
   Layers,
-  Users,
-  Calendar,
   CheckCircle2,
-  ExternalLink,
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -341,3 +338,4 @@ export function AdminCoursesTable({ initialCourses }: AdminCoursesTableProps) {
     </div>
   )
 }
+

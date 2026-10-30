@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Sparkles, Target, Compass, Users2, ShieldCheck, ArrowRight, Heart } from "lucide-react"
+import { Sparkles, Target, Compass, Users2, ShieldCheck, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const values = [

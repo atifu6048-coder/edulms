@@ -8,7 +8,7 @@ import {
   Draggable,
   type DropResult,
 } from "@hello-pangea/dnd"
-import { GripVertical, Pencil, Trash2, Loader2, Sparkles } from "lucide-react"
+import { GripVertical, Pencil, Trash2, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
 import { Badge } from "@/components/ui/badge"

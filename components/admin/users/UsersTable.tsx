@@ -140,14 +140,14 @@ export function UsersTable({ initialUsers, currentAdminId }: UsersTableProps) {
           />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           {["ALL", "STUDENT", "INSTRUCTOR", "ADMIN"].map((r) => (
             <Button
               key={r}
               variant={roleFilter === r ? "default" : "outline"}
               size="sm"
               onClick={() => setRoleFilter(r)}
-              className="text-xs font-semibold capitalize h-9"
+              className="text-xs font-semibold capitalize h-8 sm:h-9 px-2.5 sm:px-3"
             >
               {r.toLowerCase()}
             </Button>
@@ -327,3 +327,4 @@ export function UsersTable({ initialUsers, currentAdminId }: UsersTableProps) {
     </div>
   )
 }
+

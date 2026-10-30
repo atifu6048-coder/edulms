@@ -1,9 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import {
-  CheckCircle2,
   XCircle,
-  Award,
   Calendar,
   User,
   BookOpen,

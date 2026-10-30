@@ -8,8 +8,6 @@ import {
   BarChart,
   Lock,
   PlayCircle,
-  CheckCircle2,
-  ArrowRight,
   Sparkles,
   Layers,
   ArrowLeft,
@@ -18,7 +16,6 @@ import {
 import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/auth"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { EnrollButton } from "@/components/courses/EnrollButton"
 
 interface CourseDetailPageProps {

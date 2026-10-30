@@ -8,7 +8,6 @@ import {
   Trash2,
   FolderTree,
   Loader2,
-  AlertCircle,
   Hash,
 } from "lucide-react"
 import { toast } from "sonner"
@@ -447,3 +446,4 @@ export function CategoryManagement({
     </div>
   )
 }
+

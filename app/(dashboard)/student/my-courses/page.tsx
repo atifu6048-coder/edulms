@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { BookOpen, Compass } from "lucide-react"
+import { Compass } from "lucide-react"
 
 import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/auth"

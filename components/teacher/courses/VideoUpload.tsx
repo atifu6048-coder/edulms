@@ -4,13 +4,11 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import {
-  Video,
   UploadCloud,
   Pencil,
   Loader2,
   X,
   CheckCircle2,
-  AlertCircle,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -27,7 +25,7 @@ interface VideoUploadProps {
 
 export function VideoUpload({
   initialData,
-  courseId,
+  courseId: _courseId,
   chapterId,
 }: VideoUploadProps) {
   const [isEditing, setIsEditing] = React.useState(false)

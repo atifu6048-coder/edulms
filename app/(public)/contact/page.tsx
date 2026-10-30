@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Mail, MessageSquare, MapPin, Clock, Send, Loader2, Sparkles } from "lucide-react"
+import { Mail, MessageSquare, Clock, Send, Loader2, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"

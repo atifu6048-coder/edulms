@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
-import { ChevronLeft, ChevronRight, PlayCircle, Sparkles } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/auth"
@@ -77,9 +77,7 @@ export default async function StudentLearnPage({ params }: LearnPageProps) {
   })
 
   const isEnrolled = !!enrollment || isOwner || isAdmin
-  const hasPreviewAccess = Boolean(
-    currentChapter.isFree || (currentChapter as any).isPreview
-  )
+  const hasPreviewAccess = Boolean(currentChapter.isFree)
 
   if (!isEnrolled && !hasPreviewAccess) {
     redirect(`/courses/${courseId}`)
@@ -101,7 +99,7 @@ export default async function StudentLearnPage({ params }: LearnPageProps) {
     id: ch.id,
     title: ch.title,
     position: ch.position,
-    isFree: Boolean(ch.isFree || (ch as any).isPreview),
+    isFree: Boolean(ch.isFree),
     isCompleted: completedMap.get(ch.id) ?? false,
   }))
 

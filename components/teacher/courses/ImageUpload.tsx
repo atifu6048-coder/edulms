@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import {
   UploadCloud,
-  ImageIcon,
   Pencil,
   Loader2,
   X,

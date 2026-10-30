@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
 
 const levelOptions = [
   { label: "Beginner Level", value: "BEGINNER" },
